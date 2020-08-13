@@ -1,0 +1,82 @@
+{
+	title = "Preferences Controller";
+	items = (
+		{
+			cell = PSSwitchCell;
+			key = "enableTweak";
+			label = "Enable Tweak";
+			default = 1;
+			defaults = com.tomaszpoliszuk.preferencescontroller;
+			PostNotification = "com.tomaszpoliszuk.preferencescontroller.settingschanged";
+		},
+		{
+			cell = PSGroupCell;
+			label = "Ability to block WiFi Access";
+			footerText = "Most of iOS devices can turn off acces to cellular internet for apps in 'Mobile Data' panel in Settings app. iOS devices sold in China can also restrict acces for WiFi in the same settings panel. This toggle enable this access. (TODO - is uninstalling without enabling WiFi blocks app from accesing it?)";
+		},
+		{
+			cell = PSSwitchCell;
+			key = "enableAbilityToBlockWiFiAccess";
+			label = "Enable Ability To Block WiFi Access";
+			default = 1;
+			defaults = com.tomaszpoliszuk.preferencescontroller;
+			PostNotification = "com.tomaszpoliszuk.preferencescontroller.settingschanged";
+		},
+		{
+			cell = PSGroupCell;
+			label = "Preferences Layout";
+		},
+		{
+			cell = PSSwitchCell;
+			key = "showIcons";
+			label = "showIcons";
+			default = 1;
+			defaults = com.tomaszpoliszuk.preferencescontroller;
+			PostNotification = "com.tomaszpoliszuk.preferencescontroller.settingschanged";
+		},
+		{
+			cell = PSSwitchCell;
+			key = "showSeparators";
+			label = "showSeparators";
+			default = 1;
+			defaults = com.tomaszpoliszuk.preferencescontroller;
+			PostNotification = "com.tomaszpoliszuk.preferencescontroller.settingschanged";
+		},
+		{
+			cell = PSSwitchCell;
+			key = "roundedGroups";
+			label = "roundedGroups";
+			default = 1;
+			defaults = com.tomaszpoliszuk.preferencescontroller;
+			PostNotification = "com.tomaszpoliszuk.preferencescontroller.settingschanged";
+		},
+		{
+			cell = PSGroupCell;
+			label = "Related Links";
+		},
+		{
+			cell = PSButtonCell;
+			label = "Source Code";
+			action = sourceCode;
+			icon = "icons/code.png";
+		},
+		{
+			cell = PSButtonCell;
+			label = "Report Issue @ GitHub";
+			action = reportIssueAtGithub;
+			icon = "icons/bug.png";
+		},
+		{
+			cell = PSButtonCell;
+			label = "Tomasz Poliszuk @ Github";
+			action = TomaszPoliszukAtGithub;
+			icon = "icons/github.png";
+		},
+		{
+			cell = PSButtonCell;
+			label = "Tomasz Poliszuk @ Twitter";
+			action = TomaszPoliszukAtTwitter;
+			icon = "icons/twitter.png";
+		},
+	);
+}

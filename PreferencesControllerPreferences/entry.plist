@@ -1,0 +1,10 @@
+{
+	entry = {
+		cell = PSLinkCell;
+		isController = 1;
+		label = "Preferences Controller";
+		bundle = PreferencesControllerPreferences;
+		detail = PreferencesControllerMainPreferences;
+		icon = icons/PreferencesController.png;
+	};
+}

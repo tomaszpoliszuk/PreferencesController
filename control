@@ -1,0 +1,11 @@
+Package: com.tomaszpoliszuk.preferencescontroller
+Depends: firmware (>= 13.0), mobilesubstrate, preferenceloader
+Name: Preferences Controller
+Version: 1.0
+Architecture: iphoneos-arm
+Description: Control your Preferences
+Author: Tomasz Poliszuk
+Section: Tweaks
+dev: tomaszpoliszuk
+Tag: purpose::extension, compatible::ios13
+Icon: file:///Library/PreferenceBundles/PreferencesControllerPreferences.bundle/icons/PreferencesController@3x.png
