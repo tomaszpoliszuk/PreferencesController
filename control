@@ -1,5 +1,5 @@
 Package: com.tomaszpoliszuk.preferencescontroller
-Depends: firmware (>= 13.0), mobilesubstrate, preferenceloader
+Depends: firmware (>= 10.0), mobilesubstrate, preferenceloader
 Name: Preferences Controller
 Version: 0.5
 Architecture: iphoneos-arm

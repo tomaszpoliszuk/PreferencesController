@@ -8,19 +8,8 @@
 			default = 1;
 			defaults = com.tomaszpoliszuk.preferencescontroller;
 			PostNotification = "com.tomaszpoliszuk.preferencescontroller.settingschanged";
-		},
-		{
-			cell = PSGroupCell;
-			label = "Ability to block WiFi Access";
-			footerText = "Most of iOS devices can turn off acces to cellular internet for apps in 'Mobile Data' panel in Settings app. iOS devices sold in China can also restrict acces for WiFi in the same settings panel. This toggle enable this access. (TODO - is uninstalling without enabling WiFi blocks app from accesing it?)";
-		},
-		{
-			cell = PSSwitchCell;
-			key = "enableAbilityToBlockWiFiAccess";
-			label = "Enable Ability To Block WiFi Access";
-			default = 1;
-			defaults = com.tomaszpoliszuk.preferencescontroller;
-			PostNotification = "com.tomaszpoliszuk.preferencescontroller.settingschanged";
+			icon = icons/PreferencesController.png;
+			height = 55;
 		},
 		{
 			cell = PSGroupCell;
@@ -28,27 +17,57 @@
 		},
 		{
 			cell = PSSwitchCell;
-			key = "showIcons";
-			label = "showIcons";
+			key = "icons";
+			label = "icons";
 			default = 1;
 			defaults = com.tomaszpoliszuk.preferencescontroller;
 			PostNotification = "com.tomaszpoliszuk.preferencescontroller.settingschanged";
 		},
 		{
 			cell = PSSwitchCell;
-			key = "showSeparators";
-			label = "showSeparators";
+			key = "separators";
+			label = "separators";
 			default = 1;
 			defaults = com.tomaszpoliszuk.preferencescontroller;
 			PostNotification = "com.tomaszpoliszuk.preferencescontroller.settingschanged";
 		},
 		{
 			cell = PSSwitchCell;
-			key = "roundedGroups";
-			label = "roundedGroups";
+			key = "fullWidthCells";
+			label = "fullWidthCells";
 			default = 1;
 			defaults = com.tomaszpoliszuk.preferencescontroller;
 			PostNotification = "com.tomaszpoliszuk.preferencescontroller.settingschanged";
+		},
+		{
+			cell = PSSwitchCell;
+			key = "rounded";
+			label = "rounded";
+			default = 1;
+			defaults = com.tomaszpoliszuk.preferencescontroller;
+			PostNotification = "com.tomaszpoliszuk.preferencescontroller.settingschanged";
+		},
+		{
+			cell = PSGroupCell;
+			label = largeTitle;
+		},
+		{
+			cell = PSSegmentCell;
+			key = largeTitle;
+			default = 999;
+			defaults = com.tomaszpoliszuk.preferencescontroller;
+			PostNotification = "com.tomaszpoliszuk.preferencescontroller.settingschanged";
+			validValues = (
+				999,
+				0,
+				1
+			);
+			validTitles = (
+				Default,
+				On,
+				Off
+			);
+			height = 55;
 		},
 		{
 			cell = PSGroupCell;

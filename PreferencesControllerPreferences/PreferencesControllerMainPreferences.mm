@@ -1,6 +1,25 @@
+/* Preferences Controller
+ * Copyright (C) 2020 Tomasz Poliszuk
+ *
+ * Preferences Controller is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, version 3 of the License.
+ *
+ * Preferences Controller is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Preferences Controller. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+
 //#import <Preferences/PSViewController.h>
 #import <Preferences/PSListController.h>
 #import <Preferences/PSSpecifier.h>
+
+NSString *domainString = @"com.tomaszpoliszuk.preferencescontroller";
 
 @interface PSControlTableCell : PSTableCell
 - (UIControl *)control;
@@ -23,6 +42,22 @@
 		_specifiers = [self loadSpecifiersFromPlistName:@"Root" target:self];
 	}
 	return _specifiers;
+}
+
+- (void)resetSettings {
+	NSUserDefaults *tweakSettings = [[NSUserDefaults alloc] initWithSuiteName:domainString];
+	UIAlertController *resetSettingsAlert = [UIAlertController alertControllerWithTitle:@"Preferences Controller Settings" message:@"Do you want to reset settings?" preferredStyle:UIAlertControllerStyleAlert];
+	UIAlertAction *confirm = [UIAlertAction actionWithTitle:@"Confirm" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+		for(NSString* key in [[tweakSettings dictionaryRepresentation] allKeys]) {
+			[tweakSettings removeObjectForKey:key];
+		}
+		[tweakSettings synchronize];
+		[self reloadSpecifiers];
+	}];
+	UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+	[resetSettingsAlert addAction:cancel];
+	[resetSettingsAlert addAction:confirm];
+	[self presentViewController:resetSettingsAlert animated:YES completion:nil];
 }
 
 -(void)sourceCode {

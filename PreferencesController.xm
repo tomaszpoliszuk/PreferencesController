@@ -1,3 +1,20 @@
+/* Preferences Controller
+ * Copyright (C) 2020 Tomasz Poliszuk
+ *
+ * Preferences Controller is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, version 3 of the License.
+ *
+ * Preferences Controller is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Preferences Controller. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+
 #import <Preferences/PSListController.h>
 #import <Preferences/PSTableCell.h>
 #import <Preferences/PSSpecifier.h>
@@ -8,143 +25,102 @@ NSMutableDictionary *tweakSettings;
 
 static BOOL enableTweak;
 
-static BOOL enableAbilityToBlockWiFiAccess;
+static BOOL icons;
 
-static BOOL showIcons;
+static BOOL separators;
 
-static BOOL showSeparators;
+static BOOL rounded;
 
-static BOOL roundedGroups;
+static BOOL fullWidthCells;
 
-UILongPressGestureRecognizer *longPressGestureRecognizer;
+static int largeTitle;
 
 void SettingsChanged() {
 	NSUserDefaults *tweakSettings = [[NSUserDefaults alloc] initWithSuiteName:domainString];
 
 	enableTweak = [([tweakSettings objectForKey:@"enableTweak"] ?: @(YES)) boolValue];
 
-	enableAbilityToBlockWiFiAccess = [([tweakSettings objectForKey:@"enableAbilityToBlockWiFiAccess"] ?: @(YES)) boolValue];
-
-	showIcons = [([tweakSettings objectForKey:@"showIcons"] ?: @(YES)) boolValue];
-
-	showSeparators = [([tweakSettings objectForKey:@"showSeparators"] ?: @(YES)) boolValue];
-
-	roundedGroups = [([tweakSettings objectForKey:@"roundedGroups"] ?: @(YES)) boolValue];
+	icons = [([tweakSettings objectForKey:@"icons"] ?: @(YES)) boolValue];
+	separators = [([tweakSettings objectForKey:@"separators"] ?: @(YES)) boolValue];
+	rounded = [([tweakSettings objectForKey:@"rounded"] ?: @(YES)) boolValue];
+	fullWidthCells = [([tweakSettings objectForKey:@"fullWidthCells"] ?: @(YES)) boolValue];
+	largeTitle = [([tweakSettings objectForKey:@"largeTitle"] ?: @(999)) integerValue];
 }
 
-%hook UIDevice
--(bool)sf_isChinaRegionCellularDevice {
+//	%hook PSCapabilityManager
+//	- (bool)capabilityBoolAnswer:(id)arg1 {
+//		return YES;
+//	}
+//	- (bool)hasCapabilities:(id)arg1 {
+//		return YES;
+//	}
+//	%end
+
+//	%hook UIDevice
+//	-(bool)sf_isChinaRegionCellularDevice {
+//		bool origValue = %orig;
+//		if ( enableTweak ) {
+//			return enableAbilityToBlockWiFiAccess;
+//		} else {
+//			return origValue;
+//		}
+//	}
+//	%end
+
+%hook UINavigationBar
+- (bool)prefersLargeTitles {
 	bool origValue = %orig;
-	if ( enableTweak ) {
-		return enableAbilityToBlockWiFiAccess;
-	} else {
-		return origValue;
+	if ( enableTweak && largeTitle != 999 ) {
+		return largeTitle;
 	}
+	return origValue;
 }
 %end
 
-%hook PSListController
-- (bool)edgeToEdgeCells {
-	bool origValue = %orig;
+%hook UITableView
+- (UIEdgeInsets)_sectionContentInset {
+	UIEdgeInsets origValue = %orig;
 	if ( enableTweak ) {
-		return !roundedGroups;
-	} else {
-		return origValue;
+		if ( !fullWidthCells ) {
+			origValue.left = 20;
+			origValue.right = 20;
+		} else {
+			origValue.left = 0;
+			origValue.right = 0;
+		}
 	}
+	return origValue;
 }
-- (bool)_isRegularWidth {
-	bool origValue = %orig;
-	if ( enableTweak ) {
-		return roundedGroups;
-	} else {
-		return origValue;
+- (double)_sectionCornerRadius {
+	double origValue = %orig;
+	if ( enableTweak && !rounded ) {
+		return 10;
 	}
+	return origValue;
 }
 %end
 
-@interface PSUIPrefsListController : PSListController
-@end
-%hook PSUIPrefsListController
-- (bool)_cellularDataSetting {
+%hook UITableViewCell
+- (bool)_usesrounded {
 	bool origValue = %orig;
-	if ( enableTweak && enableAbilityToBlockWiFiAccess ) {
-		return enableAbilityToBlockWiFiAccess;
-	} else {
-		return origValue;
+	if ( enableTweak && !fullWidthCells ) {
+		return rounded;
 	}
+	return origValue;
 }
-- (bool)isCellularDataEnabled {
-	bool origValue = %orig;
-	if ( enableTweak && enableAbilityToBlockWiFiAccess ) {
-		return enableAbilityToBlockWiFiAccess;
-	} else {
-		return origValue;
+- (double)_roundedGroupCornerRadius {
+	double origValue = %orig;
+	if ( enableTweak && !rounded ) {
+		return 10;
 	}
-}
-- (bool)_cellularDataSettingInitialized {
-	bool origValue = %orig;
-	if ( enableTweak && enableAbilityToBlockWiFiAccess ) {
-		return enableAbilityToBlockWiFiAccess;
-	} else {
-		return origValue;
-	}
-}
-- (void)set_cellularDataSetting:(bool)arg1 {
-	if ( enableTweak && enableAbilityToBlockWiFiAccess ) {
-		%orig(enableAbilityToBlockWiFiAccess);
-	} else {
-		%orig;
-	}
-}
-- (void)set_cellularDataSettingInitialized:(bool)arg1 {
-	if ( enableTweak && enableAbilityToBlockWiFiAccess ) {
-		%orig(enableAbilityToBlockWiFiAccess);
-	} else {
-		%orig;
-	}
-}
-
-- (bool)skipSelectingDefaultCategoryOnLaunch {
-	bool origValue = %orig;
-	if ( enableTweak ) {
-		return YES;
-	} else {
-		return origValue;
-	}
-}
-%end
-
-%hook PSTableCell
-- (void)setIcon:(id)arg1 {
-	if ( enableTweak && !showIcons ) {
-		%orig(nil);
-	} else {
-		%orig;
-	}
+	return origValue;
 }
 - (double)_separatorHeight {
 	double origValue = %orig;
-	if ( enableTweak && !showSeparators ) {
+	if ( enableTweak && !separators ) {
 		return 0;
-	} else {
-		return origValue;
 	}
-}
-- (long long)separatorStyle {
-	long long origValue = %orig;
-	if ( enableTweak && !showSeparators ) {
-		return 0;
-	} else {
-		return origValue;
-	}
-}
-- (bool)_usesRoundedGroups {
-	bool origValue = %orig;
-	if ( enableTweak ) {
-		return roundedGroups;
-	} else {
-		return origValue;
-	}
+	return origValue;
 }
 %end
 
